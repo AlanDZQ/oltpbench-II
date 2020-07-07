@@ -150,7 +150,7 @@ script:
     else
       BENCH=${TEST} ;
     fi
-  - ./mvnw clean package
+  - ./mvnw clean package;
     config=config/${DB}/sample_${TEST}_config.xml ;
     sed -i
         -e "/<type>/c\<type>${TYPE}</type>"
@@ -163,10 +163,10 @@ script:
         -e "/<time>/c\<time>${TIME}</time>"
         -e "/<isolation>/c\<isolation>TRANSACTION_READ_COMMITTED</isolation>"
         "${config}";
-      cd target
-      unzip oltpbench2-20.1.3-SNAPSHOT.zip
-      cd oltpbench2-20.1.3-SNAPSHOT
-      java -jar oltpbench2.jar -b "${BENCH}" -c "${config}" --create=true --load=true --execute=true -s 5
+      cd target;
+      unzip oltpbench2-20.1.3-SNAPSHOT.zip;
+      cd oltpbench2-20.1.3-SNAPSHOT;
+      java -jar oltpbench2.jar -b "${BENCH}" -c "${config}" --create=true --load=true --execute=true -s 5;
     fi
 
 # With tests, scalefactor and terminals are just to reduce load on travis

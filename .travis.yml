@@ -15,6 +15,52 @@ language: java
 jdk:
   - openjdk11
 
+#matrix:
+#  allow_failures:
+#    - jdk: oraclejdk9
+
+# Currently oraclejdk8 is mapped to DB=mysql and the
+# others are DB=postgres.
+#
+# a test env of: - DB=mysql  TEST=tatp
+# duplicated for postgres would of been nice however
+# attempting to limit non-junit tests to single jdk with
+# matrix:
+#   exclude:
+#     - jdk: oraclejdk8
+#       env: DB=mysql
+#     - jdk: oraclejdk9
+#       env: DB=mysql
+#     - jdk: oraclejdk8
+#       env: DB=postgres
+#     - jdk: oraclejdk9
+#       env: DB=postgres
+# Failed to exclude any elements.
+
+# Possibilities for future:
+# matrix:
+#   include:
+#    - addons:
+#      mariadb: 5.5
+#    - addons:
+#      mariadb: 10.0
+#    - addons:
+#      mariadb: 10.1
+#    - addons:
+#      mariadb: 10.2
+#    - addons:
+#      postgresql: 9.4
+#    - addons:
+#      postgresql: 9.5
+#    - addons:
+#      postgresql: 9.6
+##    - addons:
+##      postgresql: 9.7
+# https://docs.travis-ci.com/user/database-setup/#Using-a-different-PostgreSQL-Version
+# MariaDB wasn't supported on trusty-containers at time of writing
+# This syntax may not be correct.
+
+
 addons:
   postgresql: 9.6
 
@@ -35,10 +81,30 @@ env:
   - TEST=resourcestresser
   - TEST=chbenchmark
 
+# Missing loader com.oltpbenchmark.benchmarks.resourcestresser.ResourceStresserBenchmark.makeLoaderImpl(ResourceStresserBenchmark.java:58)
+# -> org.apache.commons.lang.NotImplementedException: Code is not implemented
+#  - TEST=resourcestresser
+
+# Missing sample config file
+#  - TEST=chbenchmark
+#
+# Missing sample config
+#  - TEST=hyadapt
+#
+# Not fully implemented
+#  - TEST=jpab
+#
+# Works only for MySQL at this time
+#  - TEST=linkbench
+#
+
+# While mariadb addon isn't used. Remove if using a addon: mariadb
+
 services:
   - mysql
 
-
+# Increase the size of ramdisk on sudo enabled infrastructure
+# https://github.com/travis-ci/travis-ci/issues/9036#issuecomment-357189213
 before_install:
   - sudo mount -o remount,size=50% /var/ramfs
 
@@ -58,6 +124,12 @@ install:
       psql -c "create database $TEST" -U postgres ;
       psql -c "ALTER USER CURRENT_USER WITH PASSWORD 'travis'" -U travis;
     fi
+
+# MySQL create user is probably one of the trust-container bugs for MySQL
+# Will probably need the following to set a password
+
+# We pass a password here as <password></password> sends no password in the protocol
+# rather than the blank one and therefore fails on MySQL.
 
 before_script:
   - if [ $DB == mysql ]; then
@@ -97,6 +169,9 @@ script:
       cd oltpbench2-20.1.3-SNAPSHOT
       java -jar oltpbench2.jar -b "${BENCH}" -c "${config}" --create=true --load=true --execute=true -s 5
     fi
+
+# With tests, scalefactor and terminals are just to reduce load on travis
+# isolation READ_COMMITTED as the TRANSACTIONAL default caused too many failures for now.
 
 after_script:
   - if [ $DB == mysql ]; then

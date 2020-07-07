@@ -13,6 +13,7 @@ cache:
 # Mainly for jdk11
 language: java
 jdk:
+  - openjdk11
   - openjdk10
   - openjdk8
   - oraclejdk8

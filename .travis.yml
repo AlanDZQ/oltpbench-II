@@ -65,7 +65,6 @@ addons:
   postgresql: 9.6
 
 env:
-  - TEST=junit
   - TEST=epinions
   - TEST=tatp
   - TEST=tpcc

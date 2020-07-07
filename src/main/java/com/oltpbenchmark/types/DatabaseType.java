@@ -37,7 +37,7 @@ public enum DatabaseType {
      * (4) Does this DBMS support "real" transactions?
      */
     MYSQL(true, false, true),
-    POSTGRES(false, false, true),
+    postgres(false, false, true),
     COCKROACHDB(false, false, true),
 
     DB2(true, false, true),

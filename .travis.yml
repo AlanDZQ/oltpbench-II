@@ -134,11 +134,11 @@ before_script:
   - if [ $DB == mysql ]; then
       URLBASE=jdbc:mysql://localhost:3306 ;
       DRIVER=com.mysql.jdbc.Driver ;
-      TYPE=mysql ;
+      TYPE=MYSQL ;
     elif [ $DB == postgres ]; then
       URLBASE=jdbc:postgresql://localhost:5432 ;
       DRIVER=org.postgresql.Driver ;
-      TYPE=postgres ;
+      TYPE=POSTGRES ;
     fi
 
 script:

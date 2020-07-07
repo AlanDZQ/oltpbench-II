@@ -17,3 +17,21 @@ jdk:
 
 addons:
   postgresql: 9.6
+
+env:
+  - TEST=junit
+  - TEST=epinions
+  - TEST=tatp
+  - TEST=tpcc
+  - TEST=voter
+  - TEST=auctionmark
+  - TEST=wikipedia
+  - TEST=ycsb
+  - TEST=seats
+  - TEST=sibench
+  - TEST=noop
+  - TEST=smallbank
+  - TEST=twitter
+  - TEST=resourcestresser
+  - TEST=chbenchmark
+

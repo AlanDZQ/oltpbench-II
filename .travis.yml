@@ -165,7 +165,7 @@ script:
     -e "/<batchsize>/c\<batchsize>128</batchsize>"
     -e "/<scalefactor>/c\<scalefactor>${SCALEFACTOR}</scalefactor>"
     -e "/<terminals>/c\<terminals>${TERMINALS}</terminals>"
-#    -e "/<time>/c\<time>${TIME}</time>"
+    -e "/<time>/c\<time>${TIME}</time>"
     "${config}";
   - java -jar oltpbench2.jar -b "${BENCH}" -c "${config}" --create=true --load=true --execute=true;
 #    config=config/${DB}/sample_${TEST}_config.xml ;

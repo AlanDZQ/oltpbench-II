@@ -111,15 +111,14 @@ before_install:
 install:
   - echo $TRAVIS_JDK_VERSION
   - if [ $TRAVIS_JDK_VERSION == openjdk11 ]; then
-      DB=mysql ;
-    else
       DB=postgres ;
+    else
+      DB=mysql ;
     fi
   - if [ $DB == mysql ]; then mysql -e "SELECT VERSION()";
       echo -e "[mysqld]\nlower_case_table_names=1" | sudo tee -a /etc/mysql/my.cnf ;
       sudo service mysql restart ;
       mysql -e "CREATE DATABASE IF NOT EXISTS ${TEST}" ;
-      mysql -e "flush privileges" ;
       mysql -e "CREATE USER 'travis'@'localhost' IDENTIFIED BY 'travis'; GRANT ALL ON *.* TO 'travis'@'localhost'";
     elif [ $DB == postgres ]; then psql -c "SELECT VERSION()" -U travis;
       psql -c "create database $TEST" -U postgres ;

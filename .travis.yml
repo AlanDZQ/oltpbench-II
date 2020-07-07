@@ -142,9 +142,9 @@ before_script:
     fi
 
 script:
-  - SCALEFACTOR=0.5
+  - SCALEFACTOR=1
   - TIME=60
-  - TERMINALS=3
+  - TERMINALS=1
   - if [ $TEST == chbenchmark ]; then
       BENCH=${TEST},tpcc ;
     else
@@ -158,13 +158,14 @@ script:
   - sed -i
     -e "/<type>/c\<type>${TYPE}</type>"
     -e "/<driver>/c\<driver>${DRIVER}</driver>"
-    -e "/<url>/c\<url>${URLBASE}/${TEST}?sslmode=disable&amp;ApplicationName=${TEST}&amp;reWriteBatchedInserts=true</url>"
+    -e "/<url>/c\<url>${URLBASE}/${TEST}</url>"
     -e "/<username>/c\<username>travis</username>"
     -e "/<password>/c\<password>travis</password>"
-    -e "/<scalefactor>/c\\<scalefactor>${SCALEFACTOR}</scalefactor>"
+    -e "/<isolation>/c\<isolation>TRANSACTION_SERIALIZABLE</isolation>"
+    -e "/<batchsize>/c\<batchsize>128</batchsize>"
+    -e "/<scalefactor>/c\<scalefactor>${SCALEFACTOR}</scalefactor>"
     -e "/<terminals>/c\<terminals>${TERMINALS}</terminals>"
-    -e "/<time>/c\<time>${TIME}</time>"
-    -e "/<isolation>/c\<isolation>TRANSACTION_READ_COMMITTED</isolation>"
+#    -e "/<time>/c\<time>${TIME}</time>"
     "${config}";
   - java -jar oltpbench2.jar -b "${BENCH}" -c "${config}" --create=true --load=true --execute=true;
 #    config=config/${DB}/sample_${TEST}_config.xml ;

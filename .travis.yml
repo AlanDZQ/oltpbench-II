@@ -15,3 +15,5 @@ language: java
 jdk:
   - openjdk11
 
+addons:
+  postgresql: 9.6

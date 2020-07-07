@@ -98,3 +98,9 @@ script:
       java -jar oltpbench2.jar -b "${BENCH}" -c "${config}" --create=true --load=true --execute=true -s 5
     fi
 
+after_script:
+  - if [ $DB == mysql ]; then
+      mysql -e "DROP DATABASE IF EXISTS ${TEST}" ;
+    elif [ $DB == postgres ]; then
+      psql -c "DROP DATABASE IF EXISTS ${TEST}" -U postgres ;
+    fi

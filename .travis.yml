@@ -158,7 +158,7 @@ script:
   - sed -i
     -e "/<type>/c\<type>${TYPE}</type>"
     -e "/<driver>/c\<driver>${DRIVER}</driver>"
-    -e "/<url>/c\<url>${URLBASE}/${TEST}</url>"
+    -e "/<url>/c\<url>${URLBASE}/${TEST}?sslmode=disable&amp;ApplicationName=${TEST}&amp;reWriteBatchedInserts=true</url>"
     -e "/<username>/c\<username>travis</username>"
     -e "/<password>/c\<password>travis</password>"
     -e "/<scalefactor>/c\\<scalefactor>${SCALEFACTOR}</scalefactor>"

@@ -7,5 +7,11 @@
       <jdbc-driver>org.postgresql.Driver</jdbc-driver>
       <jdbc-url>jdbc:postgresql://postgres.cjuprqcygfbw.us-east-1.rds.amazonaws.com:5432/postgres</jdbc-url>
     </data-source>
+    <data-source source="LOCAL" name="msft" uuid="e81bd5f9-425a-46b0-babd-4b236115c5fd">
+      <driver-ref>sqlserver.ms</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>com.microsoft.sqlserver.jdbc.SQLServerDriver</jdbc-driver>
+      <jdbc-url>jdbc:sqlserver://ec2-3-235-145-212.compute-1.amazonaws.com:1433</jdbc-url>
+    </data-source>
   </component>
 </project>

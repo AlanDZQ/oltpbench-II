@@ -106,9 +106,6 @@ services:
 # https://github.com/travis-ci/travis-ci/issues/9036#issuecomment-357189213
 before_install:
   - sudo mount -o remount,size=50% /var/ramfs
-  - sudo mysql -e "use mysql; update user set authentication_string=PASSWORD('123123') where User='root'; update user set plugin='mysql_native_password';FLUSH PRIVILEGES;"
-  - sudo mysql_upgrade -u root -p123123
-  - sudo service mysql restart
 
 install:
   - echo $TRAVIS_JDK_VERSION

@@ -106,6 +106,9 @@ services:
 # https://github.com/travis-ci/travis-ci/issues/9036#issuecomment-357189213
 before_install:
   - sudo mount -o remount,size=50% /var/ramfs
+  - sudo mysql -e "use mysql; update user set authentication_string=PASSWORD('123123') where User='root'; update user set plugin='mysql_native_password';FLUSH PRIVILEGES;"
+  - sudo mysql_upgrade -u root -p123123
+  - sudo service mysql restart
 
 install:
   - echo $TRAVIS_JDK_VERSION
@@ -118,6 +121,7 @@ install:
       echo -e "[mysqld]\nlower_case_table_names=1" | sudo tee -a /etc/mysql/my.cnf ;
       sudo service mysql restart ;
       mysql -e "CREATE DATABASE IF NOT EXISTS ${TEST}" ;
+      mysql -e "DROP USER 'travis'@'localhost'" ;
       mysql -e "flush privileges" ;
       mysql -e "CREATE USER 'travis'@'localhost' IDENTIFIED BY 'travis'; GRANT ALL ON *.* TO 'travis'@'localhost'";
     elif [ $DB == postgres ]; then psql -c "SELECT VERSION()" -U travis;

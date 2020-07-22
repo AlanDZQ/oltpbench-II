@@ -1,6 +1,8 @@
-dist: precise
+dist: trusty
 sudo: required
 group: deprecated-2017Q2
+git:
+  quiet: true
 
 # lib contains jar files to support running tests
 cache:
@@ -110,9 +112,9 @@ before_install:
 install:
   - echo $TRAVIS_JDK_VERSION
   - if [ $TRAVIS_JDK_VERSION == openjdk11 ]; then
-      DB=mysql;
+      DB=postgres;
     else
-      DB=postgres ;
+      DB=mysql ;
     fi
   - if [ $DB == mysql ]; then mysql -e "SELECT VERSION()";
       echo -e "[mysqld]\nlower_case_table_names=1" | sudo tee -a /etc/mysql/my.cnf ;

@@ -1,8 +1,6 @@
 dist: trusty
 sudo: required
 group: deprecated-2017Q2
-git:
-  quiet: true
 
 # lib contains jar files to support running tests
 cache:

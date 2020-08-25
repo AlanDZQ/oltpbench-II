@@ -102,6 +102,7 @@ env:
 
 services:
   - mysql
+  - postgresql
 
 # Increase the size of ramdisk on sudo enabled infrastructure
 # https://github.com/travis-ci/travis-ci/issues/9036#issuecomment-357189213

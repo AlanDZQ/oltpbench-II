@@ -48,6 +48,9 @@ public abstract class FileUtil {
         return result.toString();
     }
 
+    public static boolean exists(String path) {
+        return (new File(path).exists());
+    }
 
     /**
      * Create any directory in the list paths if it doesn't exist
@@ -71,6 +74,68 @@ public abstract class FileUtil {
             writer.write(content);
             writer.flush();
         }
+    }
+
+    /**
+     * Write the given string to a temporary file with the given extension as
+     * the suffix Will not delete the file after the JVM exits
+     *
+     * @param content
+     * @param ext
+     * @return
+     */
+    public static File writeStringToTempFile(String content, String ext) {
+        return (writeStringToTempFile(content, ext, false));
+    }
+
+    /**
+     * Write the given string to a temporary file with the given extension as
+     * the suffix If deleteOnExit is true, then the file will be removed when
+     * the JVM exits
+     *
+     * @param content
+     * @param ext
+     * @param deleteOnExit
+     * @return
+     */
+    public static File writeStringToTempFile(String content, String ext, boolean deleteOnExit) {
+        File tempFile = FileUtil.getTempFile(ext, deleteOnExit);
+        try {
+            FileUtil.writeStringToFile(tempFile, content);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        return tempFile;
+    }
+
+    /**
+     * Return a File handle to a temporary file location
+     *
+     * @param ext
+     *            the suffix of the filename
+     * @param deleteOnExit
+     *            whether to delete this file after the JVM exits
+     * @return
+     */
+    public static File getTempFile(String ext, boolean deleteOnExit) {
+        return getTempFile(null, ext, deleteOnExit);
+    }
+
+    public static File getTempFile(String prefix, String suffix, boolean deleteOnExit) {
+        File tempFile;
+        if (suffix != null && suffix.startsWith(".") == false)
+            suffix = "." + suffix;
+        if (prefix == null)
+            prefix = "hstore";
+
+        try {
+            tempFile = File.createTempFile(prefix, suffix);
+            if (deleteOnExit)
+                tempFile.deleteOnExit();
+        } catch (Exception ex) {
+            throw new RuntimeException(ex);
+        }
+        return (tempFile);
     }
 
 }

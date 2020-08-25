@@ -752,5 +752,7 @@ public class SEATSProfile {
         m.put("Reservation Upcoming Offset", this.reservation_upcoming_offset);
         return (StringUtil.formatMaps(m));
     }
-
+    protected static void clearCachedProfile() {
+        cachedProfile = null;
+    }
 }

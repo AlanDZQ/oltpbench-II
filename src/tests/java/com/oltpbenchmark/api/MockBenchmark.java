@@ -42,16 +42,16 @@ public class MockBenchmark extends BenchmarkModule {
     }
 
     @Override
-    protected Loader<MockBenchmark> makeLoaderImpl() throws SQLException {
+    protected Loader<MockBenchmark> makeLoaderImpl(){
         // TODO Auto-generated method stub
         return null;
     }
-    @Override
-    protected List<Worker<? extends BenchmarkModule>> makeWorkersImpl(boolean verbose) throws IOException {
-        // TODO Auto-generated method stub
-        return null;
-    }
-    @Override
+//    @Override
+//    protected List<Worker<? extends BenchmarkModule>> makeWorkersImpl(boolean verbose) throws IOException {
+//        // TODO Auto-generated method stub
+//        return null;
+//    }
+
     public URL getDatabaseDDL(DatabaseType db_type) {
         // Get our sample DDL file
         URL testDDLURL = MockBenchmark.class.getResource("test-ddl.sql");

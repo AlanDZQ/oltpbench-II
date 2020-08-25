@@ -7,9 +7,9 @@ cache:
   directories:
     - lib
 
-# We only are going to test on jdk8 + jdk10.
-# openjdk9 + oraclejdk10 were both removed from Ubuntu
- 
+  # We only are going to test on jdk8 + jdk10.
+  # openjdk9 + oraclejdk10 were both removed from Ubuntu
+
 # Mainly for jdk11
 language: java
 jdk:
@@ -65,6 +65,7 @@ addons:
   postgresql: 9.6
 
 env:
+  - TEST=junit
   - TEST=epinions
   - TEST=tatp
   - TEST=tpcc
@@ -110,20 +111,20 @@ before_install:
 install:
   - echo $TRAVIS_JDK_VERSION
   - if [ $TRAVIS_JDK_VERSION == openjdk11 ]; then
-      DB=postgres;
+    DB=postgres;
     else
-      DB=mysql ;
+    DB=mysql ;
     fi
   - if [ $DB == mysql ]; then mysql -e "SELECT VERSION()";
-      echo -e "[mysqld]\nlower_case_table_names=1" | sudo tee -a /etc/mysql/my.cnf ;
-      sudo service mysql restart ;
-      mysql -e "CREATE DATABASE IF NOT EXISTS ${TEST}" ;
-      mysql -e "DROP USER 'travis'@'localhost'" ;
-      mysql -e "flush privileges" ;
-      mysql -e "CREATE USER 'travis'@'localhost' IDENTIFIED BY 'travis'; GRANT ALL ON *.* TO 'travis'@'localhost'";
+    echo -e "[mysqld]\nlower_case_table_names=1" | sudo tee -a /etc/mysql/my.cnf ;
+    sudo service mysql restart ;
+    mysql -e "CREATE DATABASE IF NOT EXISTS ${TEST}" ;
+    mysql -e "DROP USER 'travis'@'localhost'" ;
+    mysql -e "flush privileges" ;
+    mysql -e "CREATE USER 'travis'@'localhost' IDENTIFIED BY 'travis'; GRANT ALL ON *.* TO 'travis'@'localhost'";
     elif [ $DB == postgres ]; then psql -c "SELECT VERSION()" -U travis;
-      psql -c "create database $TEST" -U postgres ;
-      psql -c "ALTER USER CURRENT_USER WITH PASSWORD 'travis'" -U travis;
+    psql -c "create database $TEST" -U postgres ;
+    psql -c "ALTER USER CURRENT_USER WITH PASSWORD 'travis'" -U travis;
     fi
 
 # MySQL create user is probably one of the trust-container bugs for MySQL
@@ -134,13 +135,13 @@ install:
 
 before_script:
   - if [ $DB == mysql ]; then
-      URLBASE=jdbc:mysql://localhost:3306 ;
-      DRIVER=com.mysql.jdbc.Driver ;
-      TYPE=MYSQL ;
+    URLBASE=jdbc:mysql://localhost:3306 ;
+    DRIVER=com.mysql.jdbc.Driver ;
+    TYPE=MYSQL ;
     elif [ $DB == postgres ]; then
-      URLBASE=jdbc:postgresql://localhost:5432 ;
-      DRIVER=org.postgresql.Driver ;
-      TYPE=POSTGRES ;
+    URLBASE=jdbc:postgresql://localhost:5432 ;
+    DRIVER=org.postgresql.Driver ;
+    TYPE=POSTGRES ;
     fi
 
 script:
@@ -148,28 +149,33 @@ script:
   - TIME=60
   - TERMINALS=1
   - if [ $TEST == chbenchmark ]; then
-      BENCH=${TEST},tpcc ;
+    BENCH=${TEST},tpcc ;
     else
-      BENCH=${TEST} ;
+    BENCH=${TEST} ;
     fi
   - ./mvnw clean package;
-  - cd target;
-  - unzip oltpbench2-20.1.3-SNAPSHOT.zip;
-  - cd oltpbench2-20.1.3-SNAPSHOT;
-  - config=config/${DB}/sample_${TEST}_config.xml ;
-  - sed -i
-    -e "/<type>/c\<type>${TYPE}</type>"
-    -e "/<driver>/c\<driver>${DRIVER}</driver>"
-    -e "/<url>/c\<url>${URLBASE}/${TEST}</url>"
-    -e "/<username>/c\<username>travis</username>"
-    -e "/<password>/c\<password>travis</password>"
-    -e "/<isolation>/c\<isolation>TRANSACTION_SERIALIZABLE</isolation>"
-    -e "/<batchsize>/c\<batchsize>128</batchsize>"
-    -e "/<scalefactor>/c\<scalefactor>${SCALEFACTOR}</scalefactor>"
-    -e "/<terminals>/c\<terminals>${TERMINALS}</terminals>"
-    -e "/<time>/c\<time>${TIME}</time>"
-    "${config}";
-  - java -jar oltpbench2.jar -b "${BENCH}" -c "${config}" --create=true --load=true --execute=true;
+  - if [ $TEST == junit ]; then
+    mvn test;
+    else
+    cd target;
+    unzip oltpbench2-20.1.3-SNAPSHOT.zip;
+    cd oltpbench2-20.1.3-SNAPSHOT;
+    config=config/${DB}/sample_${TEST}_config.xml ;
+    sed -i
+      -e "/<type>/c\<type>${TYPE}</type>"
+      -e "/<driver>/c\<driver>${DRIVER}</driver>"
+      -e "/<url>/c\<url>${URLBASE}/${TEST}</url>"
+      -e "/<username>/c\<username>travis</username>"
+      -e "/<password>/c\<password>travis</password>"
+      -e "/<isolation>/c\<isolation>TRANSACTION_SERIALIZABLE</isolation>"
+      -e "/<batchsize>/c\<batchsize>128</batchsize>"
+      -e "/<scalefactor>/c\<scalefactor>${SCALEFACTOR}</scalefactor>"
+      -e "/<terminals>/c\<terminals>${TERMINALS}</terminals>"
+      -e "/<time>/c\<time>${TIME}</time>"
+      "${config}";
+    java -jar oltpbench2.jar -b "${BENCH}" -c "${config}" --create=true --load=true --execute=true;
+    fi
+
 #    config=config/${DB}/sample_${TEST}_config.xml ;
 #    sed -i
 #        -e "/<type>/c\<type>${TYPE}</type>"
@@ -193,7 +199,7 @@ script:
 
 after_script:
   - if [ $DB == mysql ]; then
-      mysql -e "DROP DATABASE IF EXISTS ${TEST}" ;
+    mysql -e "DROP DATABASE IF EXISTS ${TEST}" ;
     elif [ $DB == postgres ]; then
-      psql -c "DROP DATABASE IF EXISTS ${TEST}" -U postgres ;
+    psql -c "DROP DATABASE IF EXISTS ${TEST}" -U postgres ;
     fi

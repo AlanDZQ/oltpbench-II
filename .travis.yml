@@ -143,6 +143,9 @@ before_script:
     URLBASE=jdbc:postgresql://localhost:5432 ;
     DRIVER=org.postgresql.Driver ;
     TYPE=POSTGRES ;
+    psql -c "UPDATE pg_settings SET setting = 32768 WHERE name = 'shared_buffers'" -U postgres ;
+    sudo /etc/init.d/postgresql stop
+    sudo /etc/init.d/postgresql start 9.3
     fi
 
 script:
@@ -150,7 +153,6 @@ script:
   - TIME=60
   - TERMINALS=1
   - if [ $TEST == chbenchmark ]; then
-    postgres -c log_connections=yes
     BENCH=${TEST},tpcc ;
     else
     BENCH=${TEST} ;

@@ -150,7 +150,7 @@ script:
   - TIME=60
   - TERMINALS=1
   - if [ $TEST == chbenchmark ]; then
-    postgres -c shared_buffers=256MB
+    - postgres -c log_connections=yes
     BENCH=${TEST},tpcc ;
     else
     BENCH=${TEST} ;

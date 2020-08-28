@@ -124,6 +124,7 @@ install:
     mysql -e "flush privileges" ;
     mysql -e "CREATE USER 'travis'@'localhost' IDENTIFIED BY 'travis'; GRANT ALL ON *.* TO 'travis'@'localhost'";
     elif [ $DB == postgres ]; then psql -c "SELECT VERSION()" -U travis;
+    sudo service postgresql restart ;
     psql -c "create database $TEST" -U postgres ;
     psql -c "ALTER USER CURRENT_USER WITH PASSWORD 'travis'" -U travis;
     fi
@@ -143,7 +144,6 @@ before_script:
     URLBASE=jdbc:postgresql://localhost:5432 ;
     DRIVER=org.postgresql.Driver ;
     TYPE=POSTGRES ;
-    psql -c "UPDATE pg_settings SET setting = 32768 WHERE name = 'shared_buffers'" -U postgres ;
     fi
 
 script:

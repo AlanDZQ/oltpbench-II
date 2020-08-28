@@ -112,9 +112,9 @@ before_install:
 install:
   - echo $TRAVIS_JDK_VERSION
   - if [ $TRAVIS_JDK_VERSION == openjdk11 ]; then
-    DB=mysql;
-    else
     DB=postgres;
+    else
+    DB=mysql;
     fi
   - if [ $DB == mysql ]; then mysql -e "SELECT VERSION()";
     echo -e "[mysqld]\nlower_case_table_names=1" | sudo tee -a /etc/mysql/my.cnf ;
@@ -150,6 +150,7 @@ script:
   - TIME=60
   - TERMINALS=1
   - if [ $TEST == chbenchmark ]; then
+    postgres -c shared_buffers=256MB
     BENCH=${TEST},tpcc ;
     else
     BENCH=${TEST} ;

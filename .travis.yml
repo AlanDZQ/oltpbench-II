@@ -162,7 +162,8 @@ script:
     cd target;
     unzip oltpbench2-20.1.3-SNAPSHOT.zip;
     cd oltpbench2-20.1.3-SNAPSHOT;
-    config=config/${DB}/sample_${TEST}_config.xml ;
+    config1=config/mysql/sample_${TEST}_config.xml ;
+    config2=config/postgres/sample_${TEST}_config.xml ;
     sed -i
       -e "/<type>/c\<type>${TYPE}</type>"
       -e "/<driver>/c\<driver>${DRIVER}</driver>"
@@ -174,8 +175,22 @@ script:
       -e "/<scalefactor>/c\<scalefactor>${SCALEFACTOR}</scalefactor>"
       -e "/<terminals>/c\<terminals>${TERMINALS}</terminals>"
       -e "/<time>/c\<time>${TIME}</time>"
-      "${config}";
-    java -jar oltpbench2.jar -b "${BENCH}" -c "${config}" --create=true --load=true --execute=true;
+      "${config1}";
+    java -jar oltpbench2.jar -b "${BENCH}" -c "${config1}" --create=true --load=true --execute=true;
+
+    sed -i
+    -e "/<type>/c\<type>${TYPE}</type>"
+    -e "/<driver>/c\<driver>${DRIVER}</driver>"
+    -e "/<url>/c\<url>${URLBASE}/${TEST}</url>"
+    -e "/<username>/c\<username>travis</username>"
+    -e "/<password>/c\<password>travis</password>"
+    -e "/<isolation>/c\<isolation>TRANSACTION_SERIALIZABLE</isolation>"
+    -e "/<batchsize>/c\<batchsize>128</batchsize>"
+    -e "/<scalefactor>/c\<scalefactor>${SCALEFACTOR}</scalefactor>"
+    -e "/<terminals>/c\<terminals>${TERMINALS}</terminals>"
+    -e "/<time>/c\<time>${TIME}</time>"
+    "${config2}";
+    java -jar oltpbench2.jar -b "${BENCH}" -c "${config2}" --create=true --load=true --execute=true;
     fi
 
 # With tests, scalefactor and terminals are just to reduce load on travis

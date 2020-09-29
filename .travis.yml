@@ -14,7 +14,7 @@ cache:
 language: java
 jdk:
   - openjdk11
-  - openjdk13
+  - openjdk11
 
 #matrix:
 #  allow_failures:

@@ -14,7 +14,7 @@ cache:
 language: java
 jdk:
   - openjdk11
-  - openjdk11
+  - openjdk12
 
 #matrix:
 #  allow_failures:
@@ -112,7 +112,7 @@ before_install:
 
 install:
   - echo $TRAVIS_JDK_VERSION
-  - if [ $TRAVIS_JDK_VERSION == openjdk11 ]; then
+  - if [ $TRAVIS_JDK_VERSION == openjdk12 ]; then
     DB=postgres;
     else
     DB=mysql;

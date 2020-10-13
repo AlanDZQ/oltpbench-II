@@ -138,7 +138,7 @@ install:
 
 before_script:
   - if [ $DB == mysql ]; then
-    URLBASE=jdbc:mysql://localhost:3306 ;
+    URLBASE=jdbc:mysql://database-1.cjuprqcygfbw.us-east-1.rds.amazonaws.com:3306 ;
     DRIVER=com.mysql.cj.jdbc.Driver ;
     TYPE=MYSQL ;
     elif [ $DB == postgres ]; then
@@ -168,8 +168,8 @@ script:
     -e "/<type>/c\<type>${TYPE}</type>"
     -e "/<driver>/c\<driver>${DRIVER}</driver>"
     -e "/<url>/c\<url>${URLBASE}/${TEST}</url>"
-    -e "/<username>/c\<username>travis</username>"
-    -e "/<password>/c\<password>travis</password>"
+    -e "/<username>/c\<username>admin</username>"
+    -e "/<password>/c\<password>adminadmin</password>"
     -e "/<isolation>/c\<isolation>TRANSACTION_SERIALIZABLE</isolation>"
     -e "/<batchsize>/c\<batchsize>128</batchsize>"
     -e "/<scalefactor>/c\<scalefactor>${SCALEFACTOR}</scalefactor>"

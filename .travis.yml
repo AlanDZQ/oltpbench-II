@@ -1,6 +1,6 @@
-dist: trusty
+dist: focal
 sudo: required
-group: deprecated-2017Q2
+group: edge
 
 # lib contains jar files to support running tests
 cache:
@@ -14,7 +14,7 @@ cache:
 language: java
 jdk:
   - openjdk11
-  - openjdk13
+  # - openjdk13
 
 #matrix:
 #  allow_failures:
@@ -66,21 +66,21 @@ addons:
   postgresql: 9.6
 
 env:
-  - TEST=junit
-  - TEST=epinions
-  - TEST=tatp
-  - TEST=tpcc
-  - TEST=voter
-  - TEST=auctionmark
-  - TEST=wikipedia
-  - TEST=ycsb
-  - TEST=seats
-  - TEST=sibench
-  - TEST=noop
+  # - TEST=junit
+  # - TEST=epinions
+  # - TEST=tatp
+  # - TEST=tpcc
+  # - TEST=voter
+  # - TEST=auctionmark
+  # - TEST=wikipedia
+  # - TEST=ycsb
+  # - TEST=seats
+  # - TEST=sibench
+  # - TEST=noop
   - TEST=smallbank
-  - TEST=twitter
-  - TEST=resourcestresser
-  - TEST=chbenchmark
+  # - TEST=twitter
+  # - TEST=resourcestresser
+  # - TEST=chbenchmark
 
 # Missing loader com.oltpbenchmark.benchmarks.resourcestresser.ResourceStresserBenchmark.makeLoaderImpl(ResourceStresserBenchmark.java:58)
 # -> org.apache.commons.lang.NotImplementedException: Code is not implemented
@@ -108,7 +108,7 @@ services:
 # Increase the size of ramdisk on sudo enabled infrastructure
 # https://github.com/travis-ci/travis-ci/issues/9036#issuecomment-357189213
 before_install:
-  - sudo mount -o remount,size=50% /var/ramfs
+  - sudo mount -o remount,size=100% /var/ramfs
 
 install:
   - echo $TRAVIS_JDK_VERSION
@@ -138,8 +138,8 @@ install:
 
 before_script:
   - if [ $DB == mysql ]; then
-    URLBASE=jdbc:mysql://localhost:3306 ;
-    DRIVER=com.mysql.jdbc.Driver ;
+    URLBASE=jdbc:mysql://database-1.cjuprqcygfbw.us-east-1.rds.amazonaws.com:3306 ;
+    DRIVER=com.mysql.cj.jdbc.Driver ;
     TYPE=MYSQL ;
     elif [ $DB == postgres ]; then
     URLBASE=jdbc:postgresql://localhost:5432 ;

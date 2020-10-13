@@ -1,6 +1,7 @@
-dist: trusty
+dist: focal
+group: edge
 sudo: required
-group: deprecated-2017Q2
+#group: deprecated-2017Q2
 
 # lib contains jar files to support running tests
 cache:
@@ -14,7 +15,7 @@ cache:
 language: java
 jdk:
   - openjdk11
-  # - openjdk13
+#  - openjdk13
 
 #matrix:
 #  allow_failures:
@@ -66,21 +67,21 @@ addons:
   postgresql: 9.6
 
 env:
-  # - TEST=junit
-  # - TEST=epinions
-  # - TEST=tatp
-  # - TEST=tpcc
-  # - TEST=voter
-  # - TEST=auctionmark
-  # - TEST=wikipedia
-  # - TEST=ycsb
-  # - TEST=seats
-  # - TEST=sibench
-  # - TEST=noop
+#  - TEST=junit
+#  - TEST=epinions
+#  - TEST=tatp
+#  - TEST=tpcc
+#  - TEST=voter
+#  - TEST=auctionmark
+#  - TEST=wikipedia
+#  - TEST=ycsb
+#  - TEST=seats
+#  - TEST=sibench
+#  - TEST=noop
   - TEST=smallbank
-  # - TEST=twitter
-  # - TEST=resourcestresser
-  # - TEST=chbenchmark
+#  - TEST=twitter
+#  - TEST=resourcestresser
+#  - TEST=chbenchmark
 
 # Missing loader com.oltpbenchmark.benchmarks.resourcestresser.ResourceStresserBenchmark.makeLoaderImpl(ResourceStresserBenchmark.java:58)
 # -> org.apache.commons.lang.NotImplementedException: Code is not implemented
@@ -138,7 +139,7 @@ install:
 
 before_script:
   - if [ $DB == mysql ]; then
-    URLBASE=jdbc:mysql://database-1.cjuprqcygfbw.us-east-1.rds.amazonaws.com:3306 ;
+    URLBASE=jdbc:mysql://localhost:3306 ;
     DRIVER=com.mysql.cj.jdbc.Driver ;
     TYPE=MYSQL ;
     elif [ $DB == postgres ]; then
@@ -168,8 +169,8 @@ script:
     -e "/<type>/c\<type>${TYPE}</type>"
     -e "/<driver>/c\<driver>${DRIVER}</driver>"
     -e "/<url>/c\<url>${URLBASE}/${TEST}</url>"
-    -e "/<username>/c\<username>admin</username>"
-    -e "/<password>/c\<password>adminadmin</password>"
+    -e "/<username>/c\<username>travis</username>"
+    -e "/<password>/c\<password>travis</password>"
     -e "/<isolation>/c\<isolation>TRANSACTION_SERIALIZABLE</isolation>"
     -e "/<batchsize>/c\<batchsize>128</batchsize>"
     -e "/<scalefactor>/c\<scalefactor>${SCALEFACTOR}</scalefactor>"

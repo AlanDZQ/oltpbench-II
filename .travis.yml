@@ -1,5 +1,5 @@
 dist: focal
-group: edge
+#group: edge
 sudo: required
 #group: deprecated-2017Q2
 

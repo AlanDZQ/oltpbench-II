@@ -1,6 +1,6 @@
-dist: focal
+dist: trusty
 sudo: required
-group: edge
+group: deprecated-2017Q2
 
 # lib contains jar files to support running tests
 cache:
